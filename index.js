@@ -5,13 +5,12 @@ dotenv.config();
 
 const mysql = require('mysql2');
 const cookieParser = require('cookie-parser');
-const jwt = require('jsonwebtoken');
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'dist')));
+// app.use(express.static(path.join(__dirname, 'dist')));
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ extended: true }));
 
