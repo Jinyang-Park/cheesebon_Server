@@ -136,3 +136,5 @@ router.post('/changeUsername', (req, res) => {
     }
   );
 });
+
+export default router;

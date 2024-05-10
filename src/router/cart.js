@@ -120,3 +120,4 @@ router.get('/getPaidTime', (req, res) => {
     }
   });
 });
+export default router;

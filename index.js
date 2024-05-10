@@ -1,17 +1,26 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-dotenv.config();
+import mysql from 'mysql2';
+import cookieParser from 'cookie-parser';
+import main from './src/router/main.js';
+import cart from './src/router/cart.js';
 
-const mysql = require('mysql2');
-const cookieParser = require('cookie-parser');
+dotenv.config();
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'dist')));
-app.use(cors({ origin: true, credentials: true }));
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    //서버간의 통신에서 쿠키를 사용하기 때문 true로 설정
+    credentials: true,
+  })
+);
 app.use(express.json({ extended: true }));
 
 app.listen(process.env.PORT || 3000, () => {
