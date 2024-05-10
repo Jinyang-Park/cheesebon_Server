@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
-const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
