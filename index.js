@@ -1,7 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import mysql from 'mysql2';
+// import mysql from 'mysql2';
+import mysql from 'mysql';
 import cookieParser from 'cookie-parser';
 import main from './src/router/main.js';
 import cart from './src/router/cart.js';
