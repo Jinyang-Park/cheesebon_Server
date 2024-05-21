@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000' || 'http://localhost:80',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     //서버간의 통신에서 쿠키를 사용하기 때문 true로 설정
     credentials: true,
@@ -24,14 +24,14 @@ app.use(
 );
 app.use(express.json({ extended: true }));
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server is running on port ${process.env.PORT || 3000}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
 
 // MYSQL
 const db = mysql.createConnection({
   host: process.env.MYSQLHOST,
-  // port: process.env.MYSQLPORT,
+  port: process.env.MYSQLPORT,
   user: process.env.MYSQLUSER,
   password: process.env.MYSQLPASSWORD,
   database: process.env.MYSQLDATABASE,
