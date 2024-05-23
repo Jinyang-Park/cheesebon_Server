@@ -1,7 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-// import mysql from 'mysql2';
 import mysql from 'mysql';
 import cookieParser from 'cookie-parser';
 import main from './src/router/main.js';
@@ -19,7 +18,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: 'http://localhost:3000' || 'http://localhost:80',
+    origin: 'http://atelier-de-cheesebon.com', // 배포된 도메인 허용
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     //서버간의 통신에서 쿠키를 사용하기 때문 true로 설정
     credentials: true,
