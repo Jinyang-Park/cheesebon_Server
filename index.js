@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: 'http://atelier-de-cheesebon.com', // 배포된 도메인 허용
+    origin: 'https://atelier-de-cheesebon.com', // 배포된 도메인 허용
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     //서버간의 통신에서 쿠키를 사용하기 때문 true로 설정
     credentials: true,
