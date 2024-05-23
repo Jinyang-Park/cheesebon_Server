@@ -24,10 +24,6 @@ app.use(
 );
 app.use(express.json({ extended: true }));
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
-});
-
 // MYSQL
 const db = mysql.createConnection({
   host: process.env.MYSQLHOST,
@@ -45,6 +41,15 @@ app.use('/cart', cart);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
+});
+
+// GET /health 요청에 대해 상태코드 200으로 응답하는 API
+app.get('/health', (req, res) => {
+  res.status(200).send('Success Heatlth Check');
+});
+
+app.listen(process.env.PORT, () => {
+  console.log(`Example app listening on port ${process.env.PORT}`);
 });
 
 export default app;
