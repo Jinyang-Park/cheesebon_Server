@@ -51,34 +51,37 @@ router.post('/signup', (req, res) => {
   const sentEmail = req.body.Email;
   const sentUserName = req.body.UserName;
   const sentPassword = req.body.Password;
-
-  db.query(
-    'SELECT COUNT(*) as count FROM users WHERE email = ?',
-    [sentEmail],
-    (err, rows, fields) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send({ message: 'Database error' });
-      } else if (rows[0].count > 0) {
-        // 이미 존재하는 이메일인 경우 처리
-        res.send({ message: 'already-in-use' });
-      } else {
-        // 이메일이 중복되지 않은 경우 회원가입 진행
-        db.query(
-          'INSERT INTO users (email, username, password) values (?,?,?)',
-          [sentEmail, sentUserName, sentPassword],
-          (err, results) => {
-            if (err) {
-              console.log('err');
-            } else {
-              console.log('success');
-              res.send({ message: 'user-added' });
+  try {
+    db.query(
+      'SELECT COUNT(*) as count FROM users WHERE email = ?',
+      [sentEmail],
+      (err, rows, fields) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send({ message: 'Database error' });
+        } else if (rows[0].count > 0) {
+          // 이미 존재하는 이메일인 경우 처리
+          res.send({ message: 'already-in-use' });
+        } else {
+          // 이메일이 중복되지 않은 경우 회원가입 진행
+          db.query(
+            'INSERT INTO users (email, username, password) values (?,?,?)',
+            [sentEmail, sentUserName, sentPassword],
+            (err, results) => {
+              if (err) {
+                console.log('err');
+              } else {
+                console.log('success');
+                res.send({ message: 'user-added' });
+              }
             }
-          }
-        );
+          );
+        }
       }
-    }
-  );
+    );
+  } catch (error) {
+    res.send({ message: 'error' });
+  }
 });
 
 // MYSQL 로그인

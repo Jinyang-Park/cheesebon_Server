@@ -1,19 +1,19 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import mysql from 'mysql';
-import cookieParser from 'cookie-parser';
-import main from './src/router/main.js';
-import cart from './src/router/cart.js';
-import multer from 'multer';
-import multerS3 from 'multer-s3';
-import { S3Client } from '@aws-sdk/client-s3';
+// 환경 변수 설정
+require('dotenv').config();
 
-dotenv.config();
+// 필요한 모듈 임포트
+const express = require('express');
+const cors = require('cors');
+const mysql = require('mysql'); // mysql 모듈은 예시 코드에서 직접 사용하지 않지만, 필요하다고 명시됨
+const cookieParser = require('cookie-parser');
+
+// multer와 S3 관련 설정
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const { S3Client } = require('@aws-sdk/client-s3');
 
 const app = express();
 
-app.use(express.json());
 app.use(cookieParser());
 
 app.use(
