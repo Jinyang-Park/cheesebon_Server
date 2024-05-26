@@ -11,7 +11,7 @@ router.use((req, res, next) => {
 });
 
 // 장바구니
-router.post('/cart', (req, res) => {
+router.post('/add', (req, res) => {
   const cart = req.body;
 
   // cart 데이터를 MySQL에 저장하는 쿼리를 작성
@@ -29,7 +29,7 @@ router.post('/cart', (req, res) => {
 });
 
 // 장바구니 정보 가져오기
-router.get('/getPaidCart', (req, res) => {
+router.get('/items', (req, res) => {
   const query = 'SELECT * FROM cart';
 
   db.query(query, (error, result) => {
@@ -50,7 +50,7 @@ router.get('/getPaidCart', (req, res) => {
 });
 
 // 결제 상품 취소
-router.delete('/delete/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
   const itemId = parseInt(req.params.id);
 
   const query = 'DELETE FROM cart WHERE id = ?';
@@ -66,7 +66,7 @@ router.delete('/delete/:id', (req, res) => {
 });
 
 // 결제 날짜 시간 취소
-router.delete('/deleteDateTime/:id', (req, res) => {
+router.delete('/paid-time/:id', (req, res) => {
   const DateTimeId = parseInt(req.params.id);
 
   const query = 'DELETE FROM paidTime WHERE id = ?';
@@ -82,7 +82,7 @@ router.delete('/deleteDateTime/:id', (req, res) => {
 });
 
 // 날짜와 시간 저장
-router.post('/savePaidTime', (req, res) => {
+router.post('/save-time', (req, res) => {
   const dateTime = req.body.dateTime;
 
   // dateTime 데이터를 MySQL에 저장하는 쿼리를 작성
@@ -100,7 +100,7 @@ router.post('/savePaidTime', (req, res) => {
 });
 
 // 날짜와 시간 가져오기
-router.get('/getPaidTime', (req, res) => {
+router.get('/paid-time', (req, res) => {
   // paidTime' 테이블에서 데이터를 가져오는 쿼리를 작성
   const query = 'SELECT * FROM paidTime';
 
