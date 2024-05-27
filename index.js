@@ -13,7 +13,6 @@ import multer from 'multer';
 import multerS3 from 'multer-s3';
 import { S3Client } from '@aws-sdk/client-s3';
 import jwt from 'jsonwebtoken';
-import cart from './src/router/cart.js';
 
 const app = express();
 
@@ -88,9 +87,6 @@ const verifyUser = (req, res, next) => {
     });
   }
 };
-
-// API 경로 설정
-app.use('/api/cart', cart);
 
 // 메인화면
 app.get('/api/users/header', verifyUser, (req, res) => {
@@ -193,18 +189,129 @@ app.put('/api/users/:userId', (req, res) => {
   );
 });
 
+// 장바구니
+app.post('/api/cart/add', (req, res) => {
+  const cart = req.body;
+
+  // cart 데이터를 MySQL에 저장하는 쿼리를 작성
+  const query = 'INSERT INTO cart (cart_data) VALUES (?)';
+
+  db.query(query, [JSON.stringify(cart)], (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ message: 'Server Error' });
+    } else {
+      console.log('cart_data', cart);
+      res.status(200).send({ message: 'Cart saved successfully' });
+    }
+  });
+});
+
+// 장바구니 정보 가져오기
+app.get('/api/cart/items', (req, res) => {
+  const query = 'SELECT * FROM cart';
+
+  db.query(query, (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ message: 'Server Error' });
+    } else {
+      const parseCartResults = result.map((result) => {
+        return {
+          ...result,
+          cart_data: JSON.parse(result.cart_data),
+        };
+      });
+      // 결과를 클라이언트에게 반환
+      res.status(200).send({ cartdata: parseCartResults });
+    }
+  });
+});
+
+// 결제 상품 취소
+app.delete('/api/cart/:id', (req, res) => {
+  const itemId = parseInt(req.params.id);
+
+  const query = 'DELETE FROM cart WHERE id = ?';
+
+  db.query(query, [itemId], (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ message: 'Server Error' });
+    } else {
+      res.status(200).send({ message: 'Successfully deleted' });
+    }
+  });
+});
+
+// 결제 날짜 시간 취소
+app.delete('/api/cart/paid-time/:id', (req, res) => {
+  const DateTimeId = parseInt(req.params.id);
+
+  const query = 'DELETE FROM paidTime WHERE id = ?';
+
+  db.query(query, [DateTimeId], (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ message: 'Server Error' });
+    } else {
+      res.status(200).send({ message: 'Successfully deleted' });
+    }
+  });
+});
+
+// 날짜와 시간 저장
+app.post('/api/cart/save-time', (req, res) => {
+  const dateTime = req.body.dateTime;
+
+  // dateTime 데이터를 MySQL에 저장하는 쿼리를 작성
+  const query = 'INSERT INTO paidTime (dateTime_data) VALUES (?)';
+
+  db.query(query, [JSON.stringify(dateTime)], (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ message: 'Server Error' });
+    } else {
+      console.log('dateTime_data', dateTime);
+      res.status(200).send({ message: 'DateTime save successful' });
+    }
+  });
+});
+
+// 날짜와 시간 가져오기
+app.get('/api/cart/paid-time', (req, res) => {
+  // paidTime' 테이블에서 데이터를 가져오는 쿼리를 작성
+  const query = 'SELECT * FROM paidTime';
+
+  db.query(query, (error, result) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ message: 'Server Error' });
+    } else {
+      const parsedResults = result.map((result) => {
+        return {
+          ...result,
+          dateTime_data: JSON.parse(result.dateTime_data),
+        };
+      });
+      // 결과를 클라이언트에게 반환
+      res.status(200).send({ dateTime: parsedResults });
+    }
+  });
+});
+
 // 서버 동작
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
 // S3
-app.post('/api/upload', upload.array('photos'), (req, res) => {
+app.post('/upload', upload.array('photos'), (req, res) => {
   res.send(req.files);
 });
 
 // GET /health 요청에 대해 상태코드 200으로 응답하는 API
-app.get('/api/health', (req, res) => {
+app.get('/health', (req, res) => {
   res.status(200).send('Success Heatlth Check');
 });
 
